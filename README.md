@@ -1,4 +1,4 @@
-# teai-pracadomowa3
+#teai-pracadomowa3
 Kurs Spring Boot 2 - praca domowa - tydzien 3
 
 Praca domowa po przerobieniu materiału z tygodnia 3. kursu:
@@ -14,6 +14,6 @@ Dodanie obsługi PATCH przy zastosowaniu JsonPatch wymaga przy testach ustawieni
 Context-Type: application/json-patch+json
 
 Sam request ma postać np.
-[{"op":"replace","path":"/model","value":"Sienaa" }]
+[{"op":"replace","path":"/model","value":"Siena" }]
 Jest to tabela z operacją, ścieżką i w przypadku replace z wartością na któą ma być pole zmienione
 
