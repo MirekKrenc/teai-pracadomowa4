@@ -8,7 +8,9 @@ Autorem kursu jest Przemek Bykowki
 
 Praca polegała na napisaniu RESTowej aplikacji MVC.
 
-Dodanie obsługi PATCH przy zastosowaniu JsonPatch wymaga przy testach ustawienia w nagłówki
+JsonPatch
+https://tools.ietf.org/html/rfc6902
+Dodanie obsługi PATCH przy zastosowaniu JsonPatch wymaga przy testach ustawienia w nagłówku
 Context-Type: application/json-patch+json
 
 Sam request ma postać np.
