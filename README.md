@@ -8,4 +8,10 @@ Autorem kursu jest Przemek Bykowki
 
 Praca polegała na napisaniu RESTowej aplikacji MVC.
 
+Dodanie obsługi PATCH przy zastosowaniu JsonPatch wymaga przy testach ustawienia w nagłówki
+Context-Type: application/json-patch+json
+
+Sam request ma postać np.
+[{"op":"replace","path":"/model","value":"Sienaa" }]
+Jest to tabela z operacją, ścieżką i w przypadku replace z wartością na któą ma być pole zmienione
 
