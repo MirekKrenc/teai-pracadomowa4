@@ -1,5 +1,10 @@
 package krenc.mirek.thirdweek.sb2k.teaipracadomowa3.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.service.MethodSet;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model.Car;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model.Color;
@@ -146,7 +151,7 @@ public class CarServiceImpl implements CarService {
             try {
                 Method methodGet = Car.class.getMethod(methodGetName);
                 setMethodMap = getSetMethodForClass(setMethodsCollection, methodGet.getName().replace("get", "set"));
-                System.out.println("MAPA:" + setMethodMap);
+
                 Method methodSet = Car.class.getMethod(setMethodMap.getName(), (Class<?>) setMethodMap.getType());
                 //jesli metoda geXXX nie zwróci null to znaczy ze dane pole jest ustawione i gotowe do update'u
                 if (methodGet.invoke(car) != null)
@@ -177,6 +182,18 @@ public class CarServiceImpl implements CarService {
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             }
+        }
+        return null;
+    }
+
+    public Car applyPatchToCar(JsonPatch jsonPatch, Car targetCar)
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = jsonPatch.apply(objectMapper.convertValue(targetCar, JsonNode.class));
+            return objectMapper.treeToValue(jsonNode, Car.class);
+        } catch (JsonPatchException | JsonProcessingException e) {
+            e.printStackTrace();
         }
         return null;
     }

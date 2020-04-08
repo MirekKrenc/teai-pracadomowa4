@@ -1,5 +1,6 @@
 package krenc.mirek.thirdweek.sb2k.teaipracadomowa3.service;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model.Car;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model.Color;
 
@@ -17,5 +18,6 @@ public interface CarService {
     boolean deletCarById(long id);
     public void showAllCars();
     Car updateCarFields(Car car);
+    Car applyPatchToCar(JsonPatch jsonPatch, Car targetCar);
 
 }

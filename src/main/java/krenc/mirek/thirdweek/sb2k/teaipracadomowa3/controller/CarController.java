@@ -1,5 +1,6 @@
 package krenc.mirek.thirdweek.sb2k.teaipracadomowa3.controller;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model.Car;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model.Color;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.service.CarService;
@@ -83,6 +84,7 @@ public class CarController {
                 new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
     }
 
+    //endpoint do update koloru - tylko
     @PatchMapping(value = "/{id}/{color}")
     public ResponseEntity<Car> modifyColor(@PathVariable long id, @PathVariable("color") Color newcolor)
     {
@@ -93,6 +95,7 @@ public class CarController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    //endpoint do update wszytkich atrybutów - w zależności od ustawienia pól w przekazywanym obiekcie
     @PatchMapping
     public ResponseEntity<Car> modifyCar(@RequestBody Car car)
     {
@@ -102,4 +105,24 @@ public class CarController {
        else
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    //endpoint do modyfikacji pól z wykorzystaniem JsonPatch
+    @PatchMapping(value = "/{id}", consumes = "application/json-patch+json" )
+    public ResponseEntity<Car> modifyCarSON(@PathVariable long id, @RequestBody JsonPatch patch)
+    {
+        Optional<Car> carForUpdate = carService.getCarById(id);
+        if (carForUpdate.isPresent()) {
+            int index = carService.getAllCars().get().indexOf(carForUpdate.get());
+            //obsluga JsonPatch
+            Car newDataCar = carService.applyPatchToCar(patch, carForUpdate.get());
+            carService.getAllCars().get().set(index, newDataCar);
+            return ResponseEntity.ok(newDataCar);
+        }
+        else
+        {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }
