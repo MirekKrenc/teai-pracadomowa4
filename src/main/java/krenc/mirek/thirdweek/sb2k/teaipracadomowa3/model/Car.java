@@ -1,6 +1,8 @@
 package krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model;
 
-public class Car {
+import org.springframework.hateoas.RepresentationModel;
+
+public class Car extends RepresentationModel {
 
     private long id;
     private String brand;

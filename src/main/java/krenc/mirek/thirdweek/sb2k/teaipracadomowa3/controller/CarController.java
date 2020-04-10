@@ -7,8 +7,12 @@ import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.service.CarService;
 import krenc.mirek.thirdweek.sb2k.teaipracadomowa3.service.CarServiceImpl;
 import org.apache.coyote.http11.HttpOutputBuffer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,27 +31,40 @@ public class CarController {
         this.carService = carService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Car>> getCars()
+    @GetMapping(produces =
+            {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CollectionModel<List<Car>>> getCars()
     {
+
         Optional<List<Car>> allCars = carService.getAllCars();
-        if (allCars.isPresent())
-            return new ResponseEntity<>(allCars.get(), HttpStatus.OK);
+        if (allCars.isPresent()) {
+            allCars.get().forEach(car -> car.add(WebMvcLinkBuilder.linkTo(CarController.class).slash(car.getId()).withSelfRel()));
+            Link linkCarList = WebMvcLinkBuilder.linkTo(CarController.class).withSelfRel();
+            CollectionModel<Car> carCollectionModel = new CollectionModel<>(allCars.get(), linkCarList);
+            return new ResponseEntity(carCollectionModel, HttpStatus.OK);
+        }
         else
             return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Car> getCarById(@PathVariable("id") long id)
     {
         Optional<Car> carById = carService.getCarById(id);
-        if (carById.isPresent())
-            return new ResponseEntity<>(carById.get(), HttpStatus.OK);
+        if (carById.isPresent()) {
+            Link linkCar = WebMvcLinkBuilder.linkTo(CarController.class).slash(carById.get().getId()).withSelfRel();
+            carById.get().add(linkCar);
+            return new ResponseEntity(carById.get(), HttpStatus.OK);
+        }
         else
             return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/color/{color}")
+    @GetMapping(value = "/color/{color}", produces = {MediaType.APPLICATION_JSON_VALUE,
+    MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<Car>> getCarsByColor(@PathVariable Color color)
     {
         Optional<List<Car>> optionalCarList = carService.getByColor(color);
@@ -59,13 +76,15 @@ public class CarController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE,
+    MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Car> addCar(@RequestBody Car newCar)
     {
-        return new ResponseEntity<>(carService.addCar(newCar), HttpStatus.OK);
+        return new ResponseEntity<>(carService.addCar(newCar), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE,
+    MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Car> updateCa(@RequestBody Car car)
     {
         Car updated = carService.updateCar(car);
@@ -107,8 +126,9 @@ public class CarController {
     }
 
     //endpoint do modyfikacji pól z wykorzystaniem JsonPatch
-    @PatchMapping(value = "/{id}", consumes = "application/json-patch+json" )
-    public ResponseEntity<Car> modifyCarSON(@PathVariable long id, @RequestBody JsonPatch patch)
+    @PatchMapping(value = "/{id}", consumes = "application/json-patch+json",
+    produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Car> modifyCarJSON(@PathVariable long id, @RequestBody JsonPatch patch)
     {
         Optional<Car> carForUpdate = carService.getCarById(id);
         if (carForUpdate.isPresent()) {
