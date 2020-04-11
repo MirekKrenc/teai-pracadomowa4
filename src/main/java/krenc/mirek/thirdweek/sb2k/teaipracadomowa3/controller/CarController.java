@@ -14,13 +14,15 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/cars")
 public class CarController {
 
@@ -31,22 +33,23 @@ public class CarController {
         this.carService = carService;
     }
 
-    @GetMapping(produces =
-            {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<CollectionModel<List<Car>>> getCars()
+    @GetMapping("")
+//            (produces =
+//            {MediaType.APPLICATION_JSON_VALUE,
+//            MediaType.APPLICATION_XML_VALUE})
+    public String getCars(Model model)
     {
-
-        Optional<List<Car>> allCars = carService.getAllCars();
-        if (allCars.isPresent()) {
-            allCars.get().forEach(car -> car.add(WebMvcLinkBuilder.linkTo(CarController.class).slash(car.getId()).withSelfRel()));
-            Link linkCarList = WebMvcLinkBuilder.linkTo(CarController.class).withSelfRel();
-            CollectionModel<Car> carCollectionModel = new CollectionModel<>(allCars.get(), linkCarList);
-            return new ResponseEntity(carCollectionModel, HttpStatus.OK);
+//        Optional<List<Car>> allCars = carService.getAllCars();
+//        if (allCars.isPresent()) {
+//            allCars.get().forEach(car -> car.add(WebMvcLinkBuilder.linkTo(CarController.class).slash(car.getId()).withSelfRel()));
+//            Link linkCarList = WebMvcLinkBuilder.linkTo(CarController.class).withSelfRel();
+//            CollectionModel<Car> carCollectionModel = new CollectionModel<>(allCars.get(), linkCarList);
+            model.addAttribute("", "");
+            return "car";
         }
-        else
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-    }
+//        else
+//            return "error";
+//    }
 
     @GetMapping(value = "/{id}",
             produces = {MediaType.APPLICATION_JSON_VALUE,
