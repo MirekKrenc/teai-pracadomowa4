@@ -19,5 +19,6 @@ public interface CarService {
     public void showAllCars();
     Car updateCarFields(Car car);
     Car applyPatchToCar(JsonPatch jsonPatch, Car targetCar);
+    int calculateNextId();
 
 }

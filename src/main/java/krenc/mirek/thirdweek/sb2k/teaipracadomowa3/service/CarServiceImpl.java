@@ -198,6 +198,11 @@ public class CarServiceImpl implements CarService {
         return null;
     }
 
+    public int calculateNextId()
+    {
+        return cars == null ? 0 : cars.size() +1;
+    }
+
 }
 
 

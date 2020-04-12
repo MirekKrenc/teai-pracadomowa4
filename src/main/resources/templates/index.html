@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,7 +10,7 @@
 
 <ul class="nav justify-content-center nav-pills">
     <li class="nav-item">
-        <a class="nav-link active" href="/cars">SHOW ALL CARS</a>
+        <a class="nav-link" href="/cars">SHOW ALL CARS</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/cars/add">ADD A NEW CAR</a>
@@ -22,41 +22,6 @@
         <a class="nav-link" href="#">SEARCH CAR BY COLOR</a>
     </li>
 </ul>
-</ul>
-<br>
-<h1>Car list</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Brand</th>
-            <th scope="col">Model</th>
-            <th scope="col">Color</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr data-th-each="car : ${carlist}">
-            <td scope="row" data-th-text="${car.id}"></td>
-            <td data-th-text="${car.brand}"></td>
-            <td data-th-text="${car.model}"></td>
-            <td data-th-text="${car.color}"></td>
-            <td>
-                <form th:action="@{'/cars/' + ${car.id}}" method="get">
-                    <button type="submit">EDIT</button>
-                </form>
-            </td>
-            <td>
-                <form th:action="@{'/cars/' + ${car.id}}" method="delete">
-                    <button type="submit">DELETE</button>
-                </form>
-            </td>
-        </tr>
-    </tbody>
-
-</table>
-
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
