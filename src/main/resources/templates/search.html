@@ -16,35 +16,22 @@
         <a class="nav-link" href="/cars">SHOW ALL CARS</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" href="/cars/add">ADD A NEW CAR</a>
+        <a class="nav-link" href="/cars/add">ADD A NEW CAR</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/cars/search">SEARCH CAR BY ID</a>
+        <a class="nav-link  active" href="/cars/search">SEARCH CAR BY ID</a>
     </li>
 </ul>
 
 
-<form th:action="@{/cars/add}" th:object="${newCar}" th:method="POST">
+<form th:action="@{/cars/search}" th:object="${car}" th:method="POST">
     <fieldset>
-        <legend class="col-form-label">Add new car:</legend>
+        <legend class="col-form-label">Id of searched car:</legend>
     <div class="form-group col-sm-2">
-        <label for="brand">Brand</label>
-        <input type="text" th:field="*{brand}" class="form-control" id="brand">
+        <label for="id">Id</label>
+        <input type="text" th:field="*{id}" class="form-control" id="id">
     </div>
-    <div class="form-group col-sm-2">
-        <label for="model">Model</label>
-        <input type="text" th:field="*{model}" class="form-control" id="model">
-    </div>
-    <div class="form-group col-sm-2">
-        <label for="color">Color</label>
-        <select name="color" th:field="*{color}" class="form-control" id="color">
-                <option th:each="color:${T(krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model.Color).values()}"
-                        th:value="${color}"
-                        th:text="${color}">
-                </option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Save car</button>
+    <button type="submit" class="btn btn-primary">Search car</button>
     </fieldset>
 </form>
 

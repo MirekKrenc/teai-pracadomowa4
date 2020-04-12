@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,7 +10,7 @@
 
 <ul class="nav justify-content-center nav-pills">
     <li class="nav-item">
-        <a class="nav-link active" href="/">HOME PAGE</a>
+        <a class="nav-link" href="/">HOME PAGE</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="/cars">SHOW ALL CARS</a>
@@ -19,9 +19,44 @@
         <a class="nav-link" href="/cars/add">ADD A NEW CAR</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/cars/search">SEARCH CAR BY ID</a>
+        <a class="nav-link active" href="/cars/search">SEARCH CAR BY ID</a>
     </li>
 </ul>
+</ul>
+<br>
+<h1 align="center">Found Car</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Color</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr >
+            <td scope="row" data-th-text="${foundCar.id}"></td>
+            <td data-th-text="${foundCar.brand}"></td>
+            <td data-th-text="${foundCar.model}"></td>
+            <td data-th-text="${foundCar.color}"></td>
+            <td>
+                <form th:action="@{'/cars/' + ${foundCar.id}}" method="get">
+                    <button type="submit">EDIT</button>
+                </form>
+            </td>
+            <td>
+                <form th:action="@{'/cars/delete/' + ${foundCar.id}}" method="post">
+                    <button type="submit">DELETE</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+
+</table>
+
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

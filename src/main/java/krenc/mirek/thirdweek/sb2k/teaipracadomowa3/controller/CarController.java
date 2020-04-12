@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping
@@ -46,12 +47,32 @@ public class CarController {
             allCars.get().forEach(car -> car.add(WebMvcLinkBuilder.linkTo(CarController.class).slash(car.getId()).withSelfRel()));
             Link linkCarList = WebMvcLinkBuilder.linkTo(CarController.class).withSelfRel();
             CollectionModel<Car> carCollectionModel = new CollectionModel<>(allCars.get(), linkCarList);
-            model.addAttribute("carlist", allCars.get());
+
+            model.addAttribute("carlist", allCars.get().stream().sorted().collect(Collectors.toList()));
             model.addAttribute("newCar", new Car());
             return "cars";
         }
         else
             return "error";
+    }
+
+    @GetMapping("/cars/search")
+    public String searchForm(Model model){
+
+        model.addAttribute("car", new Car());
+        return "search";
+    }
+
+    @PostMapping("/cars/search")
+    public String afterSearch(Car c, Model model){
+        System.out.println("Id =" + c.getId());
+        Optional<Car> car = carService.getCarById(c.getId());
+        if (car.isPresent())
+        {
+            model.addAttribute("foundCar", car.get());
+            return "car";
+        }
+        else return "error";
     }
 
     @GetMapping(value = "/cars/{id}")
@@ -97,11 +118,20 @@ public class CarController {
         return "redirect:/cars";
     }
 
+    @PostMapping("cars/delete/{id}")
+    public String deleteCarFromForm(@PathVariable long id)
+    {
+        if (carService.deletCarById(id) == true)
+        {
+            return "redirect:/cars";
+        }
+        else return "error";
+    }
+
     @PostMapping(value="/cars")
     public String updateCar(Car car, @RequestHeader Map<String, String> headers)
     {
-        headers.forEach((key, value) -> System.out.println(key + "->" + value));
-        System.out.println("W metodzie POST:" + car);
+        //headers.forEach((key, value) -> System.out.println(key + "->" + value));
         Car updated = carService.updateCar(car);
         if (car != null)
         {

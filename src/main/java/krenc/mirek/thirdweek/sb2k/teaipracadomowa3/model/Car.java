@@ -2,7 +2,7 @@ package krenc.mirek.thirdweek.sb2k.teaipracadomowa3.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
-public class Car extends RepresentationModel {
+public class Car extends RepresentationModel implements Comparable<Car> {
 
     private long id;
     private String brand;
@@ -59,5 +59,11 @@ public class Car extends RepresentationModel {
                 ", model='" + model + '\'' +
                 ", color=" + color +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(Car o) {
+        return this.getId() < o.getId() ? -1 : this.getId() > o.getId() ? 1 : 0;
     }
 }
